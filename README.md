@@ -14,6 +14,8 @@ kubectl create -f log-config-cm.yaml
 kubectl create -f logfilter.yaml
 ```
 
+Alternatively, you can install the helm chart provided.
+
 ## Improvements
 
 A better way to deal with changes in LOG_LEVEL: I could have used the [inotify](https://pypi.org/project/inotify/) library to watch for changes to the variable while the script is running. 
