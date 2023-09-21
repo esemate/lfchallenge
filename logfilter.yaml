@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: LogFilter-challenge
+spec:
+  volumes:
+    - name: ourapp-logs
+      emptyDir: {}
+    - name: cm-volume
+      configMap:
+        name: log-config
+  containers:
+    - name: ourapp
+      image: ghcr.io/theworkshopcom/ourapp:1.1
+      volumeMounts:
+        - name: ourapp-logs
+          mountPath: /var/log/app
+    - name: logfilter
+      image: logfilter:1.0      
+      volumeMounts:
+        - name: ourapp-logs
+          mountPath: /var/log/app
+        - name: cm-volume
+          mountPath: /config
+          

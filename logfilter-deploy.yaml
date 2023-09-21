@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logfilter-challenge-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: log-monitor-app
+  template:
+    metadata:
+      labels:
+        app: log-monitor-app
+    spec:
+      volumes:
+        - name: ourapp-logs
+          emptyDir: {}
+        - name: cm-volume
+          configMap:
+            name: log-config
+      containers:
+        - name: ourapp
+          image: ghcr.io/theworkshopcom/ourapp:1.1
+          volumeMounts:
+            - name: ourapp-logs
+              mountPath: /var/log/app
+        - name: logfilter
+          image: logfilter:1.0      
+          volumeMounts:
+            - name: ourapp-logs
+              mountPath: /var/log/app
+            - name: cm-volume
+              mountPath: /config
